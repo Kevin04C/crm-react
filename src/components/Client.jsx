@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
-export const Client = ({ id, nombre, email, empresa, telefono, nota }) => {
+export const Client = ({ id, nombre, email, empresa, telefono, nota, handleDelete }) => {
   let navigate = useNavigate()
 
   const handleEdit = () => {
@@ -9,20 +9,6 @@ export const Client = ({ id, nombre, email, empresa, telefono, nota }) => {
 
   const handleSee = () => {
     navigate(`${id}`)
-  }
-
-  const handleDelete = async () => {
-    const res = confirm('¿Seguro que deseas eliminar a esta persona? ')
-    if (res) {
-      try {
-        const res = await fetch(`http://localhost:4000/clientes/${id}`, {
-          method: 'DELETE',
-        })
-        if (!res.ok) throw res
-      } catch (err) {
-        console.log(err)
-      }
-    }
   }
 
   return (
@@ -57,7 +43,7 @@ export const Client = ({ id, nombre, email, empresa, telefono, nota }) => {
         <button
           type="button"
           className="bg-red-500 text-white p-2 mr-1 rounded block w-full text-sm hover:bg-red-700"
-          onClick={handleDelete}
+          onClick={() => handleDelete(id, nombre)}
         >
           Eliminar
         </button>

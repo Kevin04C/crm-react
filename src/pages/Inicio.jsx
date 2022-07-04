@@ -19,6 +19,28 @@ export const Inicio = () => {
     }
   }
 
+  const handleDelete = async (id, name) => {
+    const res = confirm(`¿Seguro que desea eliminar a ${name}?`)
+
+    if (res) {
+      try {
+        const res = await fetch(`http://localhost:4000/clientes/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-type': 'application/json',
+          },
+        })
+        if (!res.ok) throw res
+
+        await res.json()
+        const newClients = clients.filter((client) => client.id != id)
+        setClients(newClients)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }
+
   useEffect(() => {
     getClientes()
   }, [])
@@ -41,7 +63,7 @@ export const Inicio = () => {
           </thead>
           <tbody>
             {clients.map((client) => (
-              <Client key={client.id} {...client} />
+              <Client key={client.id} {...client} handleDelete={handleDelete} />
             ))}
           </tbody>
         </table>
